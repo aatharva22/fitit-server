@@ -20,7 +20,7 @@ const CLIENT_URL =
   process.env.CLIENT_URL || "http://localhost:3000";
 
 
-app.set("trust proxy", 1);
+
 const allowedOrigins = [
   "http://localhost:3000",
   "https://fitit-client.vercel.app"
@@ -51,12 +51,12 @@ app.use(
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // HTTPS on Render
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      secure: process.env.SERVER_ENV === "production", // HTTPS on Render
+      sameSite: process.env.SERVER_ENV === "production" ? "none" : "lax",
     },
   })
 );
-
+app.set("trust proxy", 1);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
