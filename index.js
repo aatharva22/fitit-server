@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import session from "express-session";
 import mongoose from "mongoose";
+import MongoStore from "connect-mongo";
 
 import userRoutes from "./users/routes.js";
 import exerciseRoutes from "./exercises/routes.js";
@@ -9,7 +10,7 @@ import savedRoutes from "./saved/routes.js";
 
 const app = express();
 
-/* ------------------ ENV ------------------ */
+
 const PORT = process.env.PORT || 4000;
 const MONGO_URI =
   process.env.MONGO_URI ||
@@ -18,7 +19,7 @@ const MONGO_URI =
 const CLIENT_URL =
   process.env.CLIENT_URL || "http://localhost:3000";
 
-/* ------------------ CORS ------------------ */
+
 app.set("trust proxy", 1);
 const allowedOrigins = [
   "http://localhost:3000",
@@ -38,11 +39,10 @@ app.use(
   })
 );
 
-/* ------------------ BODY PARSERS ------------------ */
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-/* ------------------ SESSION ------------------ */
+
+
+
 app.use(
   session({
     name: "fitit.sid",
@@ -57,18 +57,21 @@ app.use(
   })
 );
 
-/* ------------------ DATABASE ------------------ */
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+
 mongoose
   .connect(MONGO_URI)
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB error:", err));
 
-/* ------------------ ROUTES ------------------ */
+
 userRoutes(app);
 exerciseRoutes(app);
 savedRoutes(app);
 
-/* ------------------ START SERVER ------------------ */
+
 app.listen(PORT, () => {
   console.log(`FitIt server running on port ${PORT}`);
 });

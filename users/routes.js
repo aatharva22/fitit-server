@@ -3,9 +3,7 @@ import bcrypt from "bcryptjs";
 
 export default function UserRoutes(app) {
 
-  // -------------------------------
-  // SIGN UP
-  // -------------------------------
+
   app.post("/api/users/signup", async (req, res) => {
     try {
       console.log(req.body);
@@ -34,9 +32,7 @@ export default function UserRoutes(app) {
   });
 
 
-  // -------------------------------
-  // SIGN IN
-  // -------------------------------
+
   app.post("/api/users/signin", async (req, res) => {
     try {
       const { email, password } = req.body;
@@ -60,12 +56,11 @@ req.session.save(() => {
   });
 
 
-  // -------------------------------
-  // PROFILE (GET CURRENT USER)
-  // -------------------------------
+
   app.get("/api/users/profile", (req, res) => {
     try {
       const currentUser = req.session.currentUser;
+      console.log("Current User:", currentUser);
       if (!currentUser) return res.status(401).send("Not logged in");
       res.json(currentUser);
       console.log("SESSION:", req.session);
@@ -77,18 +72,14 @@ req.session.save(() => {
   });
 
 
-  // -------------------------------
-  // SIGN OUT
-  // -------------------------------
+
   app.post("/api/users/signout", (req, res) => {
     req.session.destroy();
     res.sendStatus(200);
   });
 
 
-  // -------------------------------
-  // UPDATE USER
-  // -------------------------------
+
  app.put("/api/admin/users/:id", async (req, res) => {
     if (req.session.currentUser?.role !== "admin") {
       return res.status(403).send("Admins only");

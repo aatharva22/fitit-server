@@ -7,7 +7,7 @@ export default function SavedRoutes(app) {
   try {
     const { userId, exerciseId } = req.body;
 
-    // 1️⃣ Check if already saved
+    // 1 Check if already saved
     const existing = await dao.findSavedExercise(userId, exerciseId);
     if (existing) {
       return res
@@ -15,7 +15,7 @@ export default function SavedRoutes(app) {
         .json({ message: "Exercise already saved" });
     }
 
-    // 2️⃣ Save if not exists
+    // 2️Save if not exists
     const saved = await dao.saveExercise({ userId, exerciseId });
     res.json(saved);
 
